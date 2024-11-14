@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Stack } from "expo-router";
+import { Link, router, Stack } from "expo-router";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 
@@ -21,11 +21,14 @@ export default function HomeScreen() {
 				headerTitleStyle: {
 					fontWeight: 'bold'
 				},
+				// headerRight: () => (
+				// 	<Link href={"/polls/CreatePoll"}>
+				// 		<AntDesign name="plus" size={20} color="black" />
+				// 	</Link>
+				// ),
 				headerRight: () => (
-					<Link href={"/polls/CreatePoll"}>
-						<AntDesign name="plus" size={20} color="black" />
-					</Link>
-				)
+					<AntDesign onPress={() => router.push("/polls/CreatePoll") } name="plus" size={20} color="black" />
+				),
 			}} />
 			<FlatList
 				data={polls}
