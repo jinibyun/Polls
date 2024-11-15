@@ -21,7 +21,7 @@ export default function HomeScreen() {
 			let { data, error } = await supabase
 				.from('polls')
 				.select('*');
-			if(error){
+			if (error) {
 				Alert.alert(error + ' -- Error fetching data');
 				//console.log(error);
 			}
@@ -51,6 +51,12 @@ export default function HomeScreen() {
 				headerRight: () => (
 					<AntDesign onPress={() => router.push("/polls/CreatePoll")} name="plus" size={20} color="black" />
 				),
+				headerLeft: () => (
+					// folder naming convention: React Router view ( folder_name ) as place holder
+					<Link href={'/Profile'}>
+						<AntDesign name="user" size={20} color="black" />
+					</Link>
+				),
 			}} />
 			<FlatList
 				data={polls}
@@ -59,7 +65,7 @@ export default function HomeScreen() {
 				renderItem={({ item }) => (
 					<Link href={`/polls/${item.id}`} style={styles.pollContainer}>
 						<Text style={styles.pollTitle}>
-							{item.id} : Example poll question
+							{item.id} : {item.question}
 						</Text>
 					</Link>
 				)}
