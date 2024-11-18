@@ -1,5 +1,5 @@
 import { Stack, useLocalSearchParams } from "expo-router";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Pressable, Button, Alert } from "react-native";
 import Feather from '@expo/vector-icons/Feather';
 import { ActivityIndicator } from "react-native";
@@ -14,73 +14,77 @@ export default function PollDetails() {
 
     const { user } = useAuth();
     useEffect(() => {
-        console.log(id);
-		const fetcthPolls = async () => {
-			// console.log('fetching....');
-			// ref: https://supabase.com/dashboard/project/atlcphyotrpwzdvkomqj/editor/29023?schema=public
-			let { data, error } = await supabase
-				.from('polls')
-				.select('*').eq('id', +id).single();
-			if (error) {
-				Alert.alert(error + ' -- Error fetching data');
-				//console.log(error);
-			}
-            console.log(data)
-			setPoll(data);
-		};
+        console.log('user: ' + user);
+        const fetcthPolls = async () => {
+            // console.log('fetching....');
+            // ref: https://supabase.com/dashboard/project/atlcphyotrpwzdvkomqj/editor/29023?schema=public
+            let { data, error } = await supabase
+                .from('polls')
+                .select('*').eq('id', +id).single();
+            if (error) {
+                Alert.alert(error + ' -- Error fetching data');
+                //console.log(error);
+            }
+            console.log(data);
+            setPoll(data);
+        };
 
         // fetch user's vote
-        const fetchUserVote = async() => {
+        const fetchUserVote = async () => {
+            if(!user){
+                return;
+            }
             let { data, error } = await supabase
-				.from('vote')
-				.select('*')
+                .from('vote')
+                .select('*')
                 .eq('poll_id', +id)
                 .eq('user_id', user.id)
                 //.limit(1)
                 .single();
-			// if (error) {
-			// 	Alert.alert(error + ' -- Error fetching user vote');
-			// 	//console.log(error);
-			// }
+            // if (error) {
+            // 	Alert.alert(error + ' -- Error fetching user vote');
+            // 	//console.log(error);
+            // }
             //console.log(data)
-			setUserVote(data);
-            if(data){
+            setUserVote(data);
+            if (data) {
                 setSelected(data.option);
             }
         }
 
         fetchUserVote();
-		fetcthPolls();
-	}, []);
-    
+        fetcthPolls();
+
+    }, []);
+
     const vote = async () => {
         // ref: https://supabase.com/dashboard/project/atlcphyotrpwzdvkomqj/editor/32791?schema=public
-        const newVote ={
+        const newVote = {
             option: selected,
             poll_id: poll.id,
             user_id: user.id
         }
-        if(userVote){
+        if (userVote) {
             newVote.id = userVote.id;
         }
 
         const { data, error } = await supabase
-        .from('vote')
-        // .insert([
-        // { option: selected, poll_id: poll.id, user_id: user.id },
-        // ])
-        .upsert([newVote])
-        .select().single();
+            .from('vote')
+            // .insert([
+            // { option: selected, poll_id: poll.id, user_id: user.id },
+            // ])
+            .upsert([newVote])
+            .select().single();
 
-        if(error){
+        if (error) {
             Alert.alert('Failed to vote');
-        } else{
+        } else {
             setUserVote(data);
             Alert.alert('Thank you for your vote');
         }
     }
 
-    if(!poll){
+    if (!poll) {
         return <ActivityIndicator />;
     }
 
@@ -92,14 +96,14 @@ export default function PollDetails() {
             <Text style={styles.question}>
                 {poll.question}
             </Text>
-            <View style={{gap:5}}>
+            <View style={{ gap: 5 }}>
                 {poll.options.map(option => (
-                    <Pressable 
-                        key={option} 
+                    <Pressable
+                        key={option}
                         style={styles.optionContainer}
                         onPress={() => setSelected(option)}
                     >
-                        <Feather name= {option === selected ? "check-circle": 'circle'} size={18} color={option === selected ? "green": 'gray'} />
+                        <Feather name={option === selected ? "check-circle" : 'circle'} size={18} color={option === selected ? "green" : 'gray'} />
                         <Text>{option}</Text>
                     </Pressable>
                 ))}
@@ -112,7 +116,7 @@ export default function PollDetails() {
 const styles = StyleSheet.create({
     container: {
         padding: 10,
-        gap:20
+        gap: 20
     },
     question: {
         fontSize: 20,
@@ -121,7 +125,7 @@ const styles = StyleSheet.create({
     optionContainer: {
         backgroundColor: 'white',
         padding: 10,
-        borderRadius : 5,
+        borderRadius: 5,
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10,

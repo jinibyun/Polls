@@ -14,3 +14,9 @@ https://docs.expo.dev/router/installation/
 Expo Supabase docs
 // ------
 https://supabase.com/docs/guides/getting-started/tutorials/with-expo-react-native?queryGroups=auth-store&auth-store=async-storage#initialize-a-react-native-app
+
+// -----
+Anonymous user only vote not create a poll
+(Instad of login, they are allowed to vote)
+ref: https://supabase.com/blog/anonymous-sign-ins
+// ------

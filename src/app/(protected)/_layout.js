@@ -3,11 +3,11 @@ import { useAuth } from "providers/AuthProvider";
 import React from "react";
 
 export default function ProtectedLayout(){
-    const {user} = useAuth();
+    const {isAuthenticated} = useAuth();
     
-    if(!user){
-        return <Redirect href="/Login" />
-    }
+    if(isAuthenticated){
+        return <Redirect href="/Profile" />
+    } 
     
     return (
         <Slot />
