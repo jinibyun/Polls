@@ -37,12 +37,14 @@ export default function HomeScreen() {
 			<Stack.Screen options={{
 				title: 'Polls',
 				headerStyle: {
-					backgroundColor: '#f4511e'
+					backgroundColor: '#f4511e',
 				},
 				headerTintColor: '#fff',
 				headerTitleStyle: {
-					fontWeight: 'bold'
+					fontWeight: 'bold',
+
 				},
+				headerTitleAlign: 'center',
 				// headerRight: () => (
 				// 	<Link href={"/polls/CreatePoll"}>
 				// 		<AntDesign name="plus" size={20} color="black" />
@@ -65,7 +67,7 @@ export default function HomeScreen() {
 				renderItem={({ item }) => (
 					<Link href={`/polls/${item.id}`} style={styles.pollContainer}>
 						<Text style={styles.pollTitle}>
-							{item.id} : {item.question}
+							{item.question}
 						</Text>
 					</Link>
 				)}
