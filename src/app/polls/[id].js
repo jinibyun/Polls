@@ -1,22 +1,40 @@
 import { Stack, useLocalSearchParams } from "expo-router";
-import React, {useState} from "react";
-import { View, Text, StyleSheet, Pressable, Button } from "react-native";
+import React, {useEffect, useState} from "react";
+import { View, Text, StyleSheet, Pressable, Button, Alert } from "react-native";
 import Feather from '@expo/vector-icons/Feather';
+import { ActivityIndicator } from "react-native";
+import { supabase } from "lib/supabase";
 
-const poll = {
-    question: 'React Native vs Flutter',
-    options: [
-        'React Native FTW',
-        'Flutter',
-        'SwiftUI'
-    ]
-}
 export default function PollDetails() {
     const { id } = useLocalSearchParams(); // please note file name [id].js  (this is a special way to pass parameter-->> dynamice pass parameter)
-    const [selected, setSelected] = useState('React Native FTW');
+    const [selected, setSelected] = useState('');
+    const [poll, setPoll] = useState(null);
 
+    useEffect(() => {
+        console.log(id);
+		const fetcthPolls = async () => {
+			// console.log('fetching....');
+			// ref: https://supabase.com/dashboard/project/atlcphyotrpwzdvkomqj/editor/29023?schema=public
+			let { data, error } = await supabase
+				.from('polls')
+				.select('*').eq('id', +id).single();
+			if (error) {
+				Alert.alert(error + ' -- Error fetching data');
+				//console.log(error);
+			}
+            console.log(data)
+			setPoll(data);
+		};
+
+		fetcthPolls();
+	}, []);
+    
     const vote = () => {
         // console.log('vote ' + selected);
+    }
+
+    if(!poll){
+        return <ActivityIndicator />;
     }
 
     return (
